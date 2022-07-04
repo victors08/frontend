@@ -1,16 +1,10 @@
 <template>
 
-  <div class="text-h1 q-ml-xl q-my-xl" id="welcome">
-    Olá 
-    <br/>
-    Visitante
-  </div>
-
   <div class="row items-center q-pa-md justify-center fixed-right">
 
     <q-card class="col" style="width:340px;height: 400px;">
 
-      <div class="text-h5" style="text-align:center;">
+      <div class="text-h5 q-mt-md" style="text-align:center;">
         Login
       </div>
 
@@ -44,10 +38,14 @@
           />
 
           <div class="q-ma-lg">
-            <q-btn type="submit" color="blue-8" label="Entrar"/>
+            <q-btn type="submit"
+              color="blue-8" 
+              label="Entrar"
+              @click="this.$router.push('Register')"
+             />
           </div>
           <div class="">
-            Ainda não tem conta? <a href="#">Criar conta</a>
+            Ainda não tem conta? <a href="/Register">Criar conta</a>
           </div>
         </q-form>
       </div>
@@ -63,7 +61,7 @@ import InputTexto from '@/components/campos/inputTexto.vue'
 
 
 export default {
-  name: 'LoginView',
+  name: 'FormLogin',
   components: {
       InputTexto,
   },
