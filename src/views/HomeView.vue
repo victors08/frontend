@@ -40,6 +40,6 @@ export default {
 
 <style scoped>
 #body {
-  background-image: url(https://br.freepik.com/fotos-gratis/agua-da-chuva-em-um-macro-verde-da-folha_5017036.htm#query=nature&position=10&from_view=search);
+  background-image: url(https://img.freepik.com/fotos-gratis/agua-da-chuva-em-um-macro-verde-da-folha_1150-12802.jpg);
 }
 </style>

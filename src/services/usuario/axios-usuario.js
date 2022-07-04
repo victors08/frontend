@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const URLBase = 'https://localhost:8000/'
+const URLBase = 'http://127.0.0.1:8000/'
 
 // INÍCIO DAS API DE USUÁRIO
 
