@@ -1,20 +1,33 @@
 import axios from 'axios'
 
-const URLBase = 'https://localhost:8000'
+const URLBase = 'https://localhost:8000/'
 
 // INÍCIO DAS API DE USUÁRIO
 
-function getLoginGeral (reg) {
+function UsuariosGet(){
     return axios({
-        method: 'post',
-        url: `${URLBase}LoginGeral`,
-        data: reg,
+        method: 'get',
+        url: `${URLBase}usuarios/`,
     })
 }
 
+function UsuariosDetails (id) {
+    return axios({
+        method: 'get',
+        url: `${URLBase}usuarios/${id}`,
+    })
+}
+
+function UsuarioPost(reg) {
+    return axios ({
+      method: 'post',
+      url: `${URLBase}usuarioscreate/`,
+      data: reg,
+    })
+  }
 
 //END API DE USUÁRIO
 
 
 
-export {getLoginGeral};
+export {UsuariosGet, UsuariosDetails, UsuarioPost};
