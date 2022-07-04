@@ -41,11 +41,17 @@
             <q-btn type="submit"
               color="blue-8" 
               label="Entrar"
-              @click="this.$router.push('Register')"
+              @click="this.$router.push('register')"
              />
           </div>
-          <div class="">
-            Ainda não tem conta? <a href="/Register">Criar conta</a>
+          <div>
+            Ainda não tem conta? 
+            <q-btn 
+              flat color="primary" 
+              label="Criar conta"
+              @click="this.$router.push('register')"
+              size="15px"
+            />
           </div>
         </q-form>
       </div>

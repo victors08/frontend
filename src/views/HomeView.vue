@@ -1,9 +1,14 @@
 <template>
 
-  <div class="row" id="body">
+  <div class="fit row justify-center" id="body">
 
-    <div>
-      Ola, {{nomeUsuario}}
+    <div class="column text-h1">
+      <div class="col-8 fixed-bottom-left q-pa-xl">
+        Ola, 
+        <br/>
+        Visitante!
+
+      </div>
     </div>
 
     <div>
