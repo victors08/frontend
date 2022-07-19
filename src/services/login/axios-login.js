@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const URLBase = 'https://localhost:8000'
+const URLBase = 'http://localhost:8000'
 
 // INÍCIO API DE LOGIN
 

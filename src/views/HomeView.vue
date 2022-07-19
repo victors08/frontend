@@ -1,14 +1,14 @@
 <template>
 
-  <div class="fit row justify-center" id="body">
+  <div class="fit row justify-center">
 
     <div class="column text-h1">
-      <div class="col-8 fixed-bottom-left q-pa-xl">
-        Ola, 
-        <br/>
-        Visitante!
-
-      </div>
+      <h2 v-if="prm_nomeUsuario === '' " class="col-8 fixed-bottom-left q-pa-xl">
+        Teste
+      </h2>
+      <h2 v-else>
+        Bem-vindo {{ prm_nomeUsuario }}
+      </h2>
     </div>
 
     <div>
@@ -23,10 +23,26 @@
 
 import LoginView from '@/components/formularios/FormLogin.vue'
 
+import { SessionStorage} from 'quasar'
+
 export default {
   name: 'HomeView',
   components: {
     LoginView,
+  },
+  data (){
+    return {
+      prm_nomeUsuario: SessionStorage.getItem('usuario')
+    }
+  },
+  methods: {
+    isAuth(){
+      if(prm_nomeUsuario == ""){
+        return false;
+      }else{
+        return true;
+      }
+    }
   }
   // No começo da renderização, ele verifica se tem um Key/Valor na Sessão, se tiver tá logado
   // Se não tiver, visitante;
@@ -38,8 +54,3 @@ export default {
 }
 </script>
 
-<style scoped>
-#body {
-  background-image: url(https://img.freepik.com/fotos-gratis/agua-da-chuva-em-um-macro-verde-da-folha_1150-12802.jpg);
-}
-</style>

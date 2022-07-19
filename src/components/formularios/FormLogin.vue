@@ -11,46 +11,45 @@
       <div class="row">
         <q-form 
           class="fit row justify-center"
+          @submit="enviarFormulario()"
         >
-          <InputTexto v-model="var_nome"
+          <InputTexto v-model="var_email"
           class="q-my-md"
           lazy-rules="ondemand"
-          :rules="[ val => !!val || 'Por favor, informe o nome']"
+          :rules="[ val => !!val || 'Por favor, informe o email']"
           string_etiqueta="E-mail"
-          bg-color="grey-1"
           :prm_limpavel="true"
           />
 
           <InputTexto v-model="var_senha"
           string_etiqueta="Senha"
-          bg-color="grey-1"
           type="password"
           :prm_limpavel="true"
           />
 
           <q-toggle
-          class="q-ma-sm"
           v-model="var_isLembrar"
-          dark
           color="blue"
-          keep-color
-          label="Permanecer conectado?"
-          />
+        >
+          <template v-slot:default>
+            <h6> Permanecer conectado?</h6>
+          </template>
+        </q-toggle>
 
-          <div class="q-ma-lg">
+          
             <q-btn type="submit"
               color="blue-8" 
               label="Entrar"
-              @click="this.$router.push('register')"
              />
-          </div>
-          <div>
+         
+
+          <div class="q-ma-xs">
             Ainda não tem conta? 
             <q-btn 
               flat color="primary" 
               label="Criar conta"
-              @click="this.$router.push('register')"
               size="15px"
+              @click="this.$router.push({name : 'register' })"
             />
           </div>
         </q-form>
@@ -73,7 +72,7 @@ export default {
   },
   data(){
     return{
-      var_nome: ref(''),
+      var_email: ref(''),
       var_senha: ref(''),
       var_isLembrar: ref(false),
     }
@@ -98,15 +97,21 @@ export default {
     // Impede Evento padrão de usar @submit
     e.preventDefault();
 
-    let login = {  "Usuario": this.var_nome, "Senha": this.var_senha}
+    let login = {  "Usuario": this.var_email, "Senha": this.var_senha}
     getLoginGeral(login)
     .then(response => {
       //SE INFORMAÇÕES CORRETAS
       this.console(response)
       if(response.data.IsOk) {
-        SessionStorage.set('cs_str_login', response.data.Model)
-        this.console(response.data)
-        this.$router.push({name : 'Marketing'})
+        
+        // Set session email usuario
+        SessionStorage.set('email', this.var_email)
+        //Set session nome usuario
+        SessionStorage.set('usuario', response.data.nome)
+        //Set session id do usuario
+        SessionStorage.set('usuario_id', response.data.id)
+
+        this.$router.push({name : 'profile' })
         
         return;
       }
@@ -114,10 +119,8 @@ export default {
       })
       .catch(err =>{
         this.console(err.data)
+        this.feedback('negative','Não foi possivel realizar o login')
       })
-    },
-    console(e) {
-      console.log(e)
     }
   },
 }

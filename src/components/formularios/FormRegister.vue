@@ -39,13 +39,13 @@
             :prm_limpavel="false"
           />
   
-          <InputTexto
+          <InputTexto v-maska="'#####-###'"
             v-model="var_cep"
             class="col-5 q-ma-xs"
             string_etiqueta="CEP"
             bg-color="grey-1"
             :prm_limpavel="false"
-            v-on:mouseover="validarCep()"
+            v-on:focusout="buscarCep()"
           />
 
           <InputTexto
@@ -60,6 +60,14 @@
             v-model="var_municipio"
             class="col-5 q-ma-xs"
             string_etiqueta="Municipio"
+            bg-color="grey-1"
+            :prm_limpavel="false"
+          />
+
+          <InputTexto
+            v-model="var_bairro"
+            class="col-5 q-ma-xs"
+            string_etiqueta="Bairro"
             bg-color="grey-1"
             :prm_limpavel="false"
           />
@@ -92,7 +100,7 @@
         <q-separator/>
 
 
-          <InputTexto
+          <InputTexto v-maska="'###.###.###-##'"
             v-model="var_cpf"
             class="col-5 q-ma-xs"
             string_etiqueta="CPF"
@@ -132,7 +140,7 @@
             <q-btn 
               label="Cancelar" 
               color="negative"
-              @click="this.$router.push('/')"
+              @click="this.$router.push({name: home})"
             />
 
           </q-card-actions>
@@ -144,10 +152,17 @@
 </template>
 
 <script>
-
+//Import components
 import InputTexto from '@/components/campos/inputTexto.vue'
+
+//Import Axios
 import { UsuarioPost } from '@/services/usuario/axios-usuario.js'
+import { pesquisarCep } from '@/services/cep/axios-cep.js'
+
+//Import Quasar
 import { useQuasar } from 'quasar'
+
+//Import Vue
 import { ref } from 'vue'
 
 export default {
@@ -158,7 +173,7 @@ export default {
   setup () {
     const $q = useQuasar()
 
-    function onFeedback (tipo, msg) {
+    function onSuccess(tipo, msg) {
       $q.notify({
       type: tipo,
       position: 'top',
@@ -167,9 +182,19 @@ export default {
       })
     }
 
+    function onRejected(msg) {
+      $q.notify({
+        type: "negative",
+        position: "top",
+        progress: true,
+        message: msg,
+      });
+    }
+
     return {
       check: ref(false),
-      onFeedback,
+      onSuccess,
+      onRejected,
     }
   },
   data (){
@@ -180,32 +205,47 @@ export default {
       var_cep: ref(''),
       var_estado: ref(''),
       var_municipio: ref(''),
+      var_bairro: ref(''),
       var_rua: ref(''),
       var_numero: ref(''),
       var_complemento: ref(''),
       var_cpf: ref(''),
       var_pis: ref(''),
       var_senha: ref(''),
+     
     }
   },
   methods: {
-    validarCep() {
-      
+    async buscarCep(){
+      let cep = this.var_cep.replace(/\.|\-/g, '');
+      pesquisarCep(cep)
+      .then(response => {
+        if(response.status == 200){
+          this.var_rua = response.data.logradouro;
+          this.var_estado = response.data.uf;
+          this.var_municipio = response.data.localidade;
+          this.var_bairro = response.data.bairro;
+          this.var_complemento = response.data.complemento;
+        }else{
+          const msg = "O CEP digitado é inválido!"
+          this.onRejected(msg);
+        }
+      }) 
     },
     enviarFormulario(){
       let var_login = {
-        "nome": this.v_nome,
-        "email": this.v_email,
-        "pais": this.v_pais,
-        "cep": this.v_cep,
-        "uf_endereco": this.v_estado,
-        "cidade": this.v_municipio,
-        "rua": this.v_rua,
-        "casa": this.v_numero,
-        "complemento_endereco": this.v_complemento,
-        "cpf": this.v_cpf,
-        "numero_pis": this.v_pis,
-        "senha": this.v_senha
+        "nome": this.var_nome,
+        "email": this.var_email,
+        "pais": this.var_pais,
+        "cep": this.var_cep,
+        "uf_endereco": this.var_estado,
+        "cidade": this.var_municipio,
+        "rua": this.var_rua,
+        "casa": this.var_numero,
+        "complemento_endereco": this.var_complemento,
+        "cpf": this.var_cpf,
+        "numero_pis": this.var_pis,
+        "senha": this.var_senha
       }
       UsuarioPost(var_login)
       .then(response => {
@@ -213,8 +253,11 @@ export default {
           this.$router.push('/')
           return window.alert("Usuário criado com sucesso");
         }
-        this.onFeedback('negative', response.data.Msg)
+        this.onRejected('negative', response.data.Msg)
       })
+      .catch(err => {
+          this.onRejected(err.response.statusText);
+        })
     },
   }
 }
