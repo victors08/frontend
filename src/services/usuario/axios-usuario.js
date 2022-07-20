@@ -14,7 +14,7 @@ function UsuariosGet(){
 function UsuariosGetEspecifico (id) {
     return axios({
         method: 'get',
-        url: `${URLBase}usuarios/update/${id}`,
+        url: `${URLBase}usuarios/${id}`,
     })
 } 
 

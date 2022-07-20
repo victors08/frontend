@@ -7,21 +7,24 @@
 
       <q-form
         class="Flex row justify-between"
-        @submit="enviarFormulario()"
+        @submit="enviarFormulario($event)"
       >
         
           <InputTexto
             v-model="var_nome"
             class="col-12 q-pa-xs"
+            lazy-rules="ondemand"
+            :rules="[ val => !!val || 'Por favor, informe um nome']"
             string_etiqueta="Nome"
             bg-color="grey-1"
-            required
             :prm_limpavel="false"
           />
   
           <InputTexto
             v-model="var_email"
             class="col-7 q-ma-xs"
+            lazy-rules="ondemand"
+            :rules="[ val => !!val || 'Por favor, informe o email']"
             string_etiqueta="E-mail"
             bg-color="grey-1"
             :prm_limpavel="false"
@@ -116,6 +119,8 @@
           <InputTexto
             v-model="var_senha"
             class="col-6 q-ma-xs"
+            lazy-rules="ondemand"
+            :rules="[ val => !!val || 'Por favor, informe uma senha']"
             string_etiqueta="Senha"
             bg-color="grey-1"
             :prm_limpavel="false"
@@ -124,7 +129,7 @@
 
           <div class="fit row justify-center">
             <q-checkbox v-model="check"
-              label="Eu aceito os termos e licenças" 
+              label="Eu aceito os termos e licenças"
             />
           </div>
 
@@ -138,7 +143,7 @@
             <q-btn 
               label="Cancelar" 
               color="negative"
-              @click="this.$router.push({name: 'home'})"
+              @click="SingUp()"
             />
 
           </q-card-actions>
@@ -157,9 +162,6 @@ import InputTexto from '@/components/campos/inputTexto.vue'
 import { UsuarioPost } from '@/services/usuario/axios-usuario.js'
 import { pesquisarCep } from '@/services/cep/axios-cep.js'
 
-//Import Quasar
-import { useQuasar } from 'quasar'
-
 //Import Vue
 import { ref } from 'vue'
 
@@ -168,35 +170,8 @@ export default {
   components: {
     InputTexto,
   },
-  setup () {
-    const $q = useQuasar()
-
-    function onSuccess(tipo, msg) {
-      $q.notify({
-      type: tipo,
-      position: 'top',
-      progress: true,
-      message: msg  
-      })
-    }
-
-    function onRejected(msg) {
-      $q.notify({
-        type: "negative",
-        position: "top",
-        progress: true,
-        message: msg,
-      });
-    }
-
-    return {
-      check: ref(false),
-      onSuccess,
-      onRejected,
-    }
-  },
   data (){
-    return{ 
+    return{
       var_nome: ref(''),
       var_email: ref(''),
       var_pais: ref(''),
@@ -210,7 +185,7 @@ export default {
       var_cpf: ref(''),
       var_pis: ref(''),
       var_senha: ref(''),
-     
+      check: ref(false),
     }
   },
   methods: {
@@ -229,40 +204,48 @@ export default {
         }
       }) 
     },
-    enviarFormulario(e){
+    enviarFormulario(e, clearCep , clearCpf) {
+      // Impede Evento padrão de usar @submit
       e.preventDefault();
-
-      let validationCep = this.var_cep.replace(/\.|\-/g, '');
-      let validationCpf = this.var_cepf.replace(/\.|\-/g, '');
+      
+      if(clearCep == "" && clearCpf == "") 
+      clearCep = this.var_cep.replace(/\.|\-/g, '');
+      clearCpf = this.var_cpf.replace(/\.|\-/g, '');
 
       let var_login = {
         "nome": this.var_nome,
         "email": this.var_email,
         "pais": this.var_pais,
-        "cep": validationCep,
+        "cep": clearCep,
         "uf_endereco": this.var_estado,
         "cidade": this.var_municipio,
         "rua": this.var_rua,
         "casa": this.var_numero,
         "complemento_endereco": this.var_complemento,
-        "cpf": validationCpf,
+        "cpf": clearCpf,
         "numero_pis": this.var_pis,
         "senha": this.var_senha
       }
       UsuarioPost(var_login)
       .then(response => {
         if(response.status == 200){
-          window.alert("Usuário criado com sucesso!");
-
-          this.$router.push('/')
-        }else {
-          window.alert("Erro ao criar usuário, tente novamente.")
+          console.log("Usuário criado com sucesso")
         }
       })
       .catch(err => {
           this.onRejected(err.response.statusText);
         })
     },
+    SingUp(){
+      firebase.auth().createUserWithEmailAndPassword(this.var_email, this.var_senha)
+      .then((user) => {
+        this.$router.push({name: 'home'});
+      },
+        (err) => {
+          alert('Aconteceu algo inesperado.' + err.message)
+        }
+      );
+    }
   }
 }
 </script>
