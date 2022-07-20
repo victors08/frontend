@@ -11,23 +11,37 @@ function UsuariosGet(){
     })
 }
 
-function UsuariosDetails (id) {
+function UsuariosGetEspecifico (id) {
     return axios({
         method: 'get',
-        url: `${URLBase}usuarios/${id}`,
+        url: `${URLBase}usuarios/update/${id}`,
     })
-}
+} 
 
 function UsuarioPost(reg) {
     return axios ({
       method: 'post',
-      url: `${URLBase}usuarioscreate/`,
+      url: `${URLBase}usuarios/create/`,
       data: reg,
     })
-  }
+}
 
+function UsuarioPut(reg, id) {
+    return axios ({
+      method: 'put',
+      url: `${URLBase}usuarios/update/${id}`,
+      data: reg,
+    })
+}
+
+function UsuarioDelete(id) {
+    return axios ({
+      method: 'delete',
+      url: `${URLBase}usuarios/delete/${id}`,
+    })
+}
 //END API DE USUÁRIO
 
 
 
-export {UsuariosGet, UsuariosDetails, UsuarioPost};
+export {UsuariosGet, UsuariosGetEspecifico, UsuarioPost, UsuarioPut, UsuarioDelete};

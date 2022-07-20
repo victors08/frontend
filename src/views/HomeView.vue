@@ -4,17 +4,16 @@
 
     <div class="column text-h1">
       <h2 v-if="prm_nomeUsuario === '' " class="col-8 fixed-bottom-left q-pa-xl">
-        Teste
+        Bem vindo, visitante!
       </h2>
       <h2 v-else>
-        Bem-vindo {{ prm_nomeUsuario }}
+        Bem vindo, <br/> visitante!
       </h2>
     </div>
 
     <div>
       <LoginView/>
     </div>
-
   </div>
 
 </template>
@@ -23,7 +22,7 @@
 
 import LoginView from '@/components/formularios/FormLogin.vue'
 
-import { SessionStorage} from 'quasar'
+import { SessionStorage, Cookies } from 'quasar'
 
 export default {
   name: 'HomeView',
@@ -33,6 +32,13 @@ export default {
   data (){
     return {
       prm_nomeUsuario: SessionStorage.getItem('usuario')
+    }
+  },
+  setup () {
+    const value = Cookies.get('cookie_name')
+
+    return {
+      value
     }
   },
   methods: {

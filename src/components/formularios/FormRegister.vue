@@ -6,34 +6,31 @@
       <div class="text-h6 q-pa-sm">Cadastro de usuário</div>
 
       <q-form
-        class="fit row justify-center"
-        @submit="enviarFormulario($event)"
+        class="Flex row justify-between"
+        @submit="enviarFormulario()"
       >
         
           <InputTexto
             v-model="var_nome"
-            class="col-5 q-ma-xs"
+            class="col-12 q-pa-xs"
             string_etiqueta="Nome"
             bg-color="grey-1"
+            required
             :prm_limpavel="false"
           />
   
           <InputTexto
             v-model="var_email"
-            class="col-5 q-ma-xs"
+            class="col-7 q-ma-xs"
             string_etiqueta="E-mail"
             bg-color="grey-1"
             :prm_limpavel="false"
             type="email"
           />
 
-
-        <q-separator/>
-        
-
           <InputTexto
             v-model="var_pais"
-            class="col-5 q-ma-xs"
+            class="col-4 q-ma-xs"
             string_etiqueta="País"
             bg-color="grey-1"
             :prm_limpavel="false"
@@ -41,7 +38,7 @@
   
           <InputTexto v-maska="'#####-###'"
             v-model="var_cep"
-            class="col-5 q-ma-xs"
+            class="col-3 q-ma-xs"
             string_etiqueta="CEP"
             bg-color="grey-1"
             :prm_limpavel="false"
@@ -50,7 +47,7 @@
 
           <InputTexto
             v-model="var_estado"
-            class="col-5 q-ma-xs"
+            class="col-3 q-ma-xs"
             string_etiqueta="Estado"
             bg-color="grey-1"
             :prm_limpavel="false"
@@ -66,7 +63,7 @@
 
           <InputTexto
             v-model="var_bairro"
-            class="col-5 q-ma-xs"
+            class="col-3 q-ma-xs"
             string_etiqueta="Bairro"
             bg-color="grey-1"
             :prm_limpavel="false"
@@ -74,7 +71,7 @@
 
           <InputTexto
             v-model="var_rua"
-            class="col-5 q-ma-xs"
+            class="col-4 q-ma-xs"
             string_etiqueta="Rua"
             bg-color="grey-1"
             :prm_limpavel="false"
@@ -82,7 +79,7 @@
 
           <InputTexto
             v-model="var_numero"
-            class="col-5 q-ma-xs"
+            class="col-3 q-ma-xs"
             string_etiqueta="Número"
             bg-color="grey-1"
             :prm_limpavel="false"
@@ -90,7 +87,7 @@
 
           <InputTexto
             v-model="var_complemento"
-            class="col-5 q-ma-xs"
+            class="col-6 q-ma-xs"
             string_etiqueta="Complemento"
             bg-color="grey-1"
             :prm_limpavel="false"
@@ -118,21 +115,22 @@
 
           <InputTexto
             v-model="var_senha"
-            class="col-5 q-ma-xs"
+            class="col-6 q-ma-xs"
             string_etiqueta="Senha"
             bg-color="grey-1"
             :prm_limpavel="false"
             type="password"
           />
 
-          <div>
-            <q-checkbox v-model="check" label="Eu aceito os termos e licenças" />
+          <div class="fit row justify-center">
+            <q-checkbox v-model="check"
+              label="Eu aceito os termos e licenças" 
+            />
           </div>
 
           <q-card-actions class="fit row justify-evenly">
-            
             <q-btn 
-              label="Confirmar" 
+              label="Confirmar"
               color="positive"
               type="submit"
             />
@@ -140,7 +138,7 @@
             <q-btn 
               label="Cancelar" 
               color="negative"
-              @click="this.$router.push({name: home})"
+              @click="this.$router.push({name: 'home'})"
             />
 
           </q-card-actions>
@@ -227,33 +225,39 @@ export default {
           this.var_bairro = response.data.bairro;
           this.var_complemento = response.data.complemento;
         }else{
-          const msg = "O CEP digitado é inválido!"
-          this.onRejected(msg);
+          window.alert("CEP digitado inválido ou não existente!")
         }
       }) 
     },
-    enviarFormulario(){
+    enviarFormulario(e){
+      e.preventDefault();
+
+      let validationCep = this.var_cep.replace(/\.|\-/g, '');
+      let validationCpf = this.var_cepf.replace(/\.|\-/g, '');
+
       let var_login = {
         "nome": this.var_nome,
         "email": this.var_email,
         "pais": this.var_pais,
-        "cep": this.var_cep,
+        "cep": validationCep,
         "uf_endereco": this.var_estado,
         "cidade": this.var_municipio,
         "rua": this.var_rua,
         "casa": this.var_numero,
         "complemento_endereco": this.var_complemento,
-        "cpf": this.var_cpf,
+        "cpf": validationCpf,
         "numero_pis": this.var_pis,
         "senha": this.var_senha
       }
       UsuarioPost(var_login)
       .then(response => {
-        if(response.data.IsOk){
+        if(response.status == 200){
+          window.alert("Usuário criado com sucesso!");
+
           this.$router.push('/')
-          return window.alert("Usuário criado com sucesso");
+        }else {
+          window.alert("Erro ao criar usuário, tente novamente.")
         }
-        this.onRejected('negative', response.data.Msg)
       })
       .catch(err => {
           this.onRejected(err.response.statusText);
