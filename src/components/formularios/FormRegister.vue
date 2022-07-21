@@ -138,12 +138,13 @@
               label="Confirmar"
               color="positive"
               type="submit"
+              @click="SingUp()"
             />
 
             <q-btn 
               label="Cancelar" 
               color="negative"
-              @click="SingUp()"
+              @click="this.$router.push({name: 'home'});"
             />
 
           </q-card-actions>
