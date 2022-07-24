@@ -5,7 +5,7 @@ import store from './store'
 import { Quasar, Cookies } from 'quasar'
 import quasarUserOptions from './quasar-user-options'
 import Maska from 'maska'
-import { initializeApp } from "firebase/app";
+import { initializeApp } from 'firebase/app';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -19,5 +19,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
 
 createApp(App).use(Maska).use(Quasar, {plugins: {Cookies}}, quasarUserOptions).use(store).use(router).mount('#app')

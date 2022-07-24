@@ -144,7 +144,7 @@
             <q-btn 
               label="Cancelar" 
               color="negative"
-              @click="this.$router.push({name: 'home'});"
+              @click="this.$router.push({name: 'home'})"
             />
 
           </q-card-actions>
@@ -230,22 +230,12 @@ export default {
       UsuarioPost(var_login)
       .then(response => {
         if(response.status == 200){
-          console.log("Usuário criado com sucesso")
+          this.$router.push({name: 'home'});
         }
       })
       .catch(err => {
           this.onRejected(err.response.statusText);
         })
-    },
-    SingUp(){
-      firebase.auth().createUserWithEmailAndPassword(this.var_email, this.var_senha)
-      .then((user) => {
-        this.$router.push({name: 'home'});
-      },
-        (err) => {
-          alert('Aconteceu algo inesperado.' + err.message)
-        }
-      );
     }
   }
 }

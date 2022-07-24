@@ -77,25 +77,10 @@ export default {
       var_isLembrar: ref(false),
     }
   },
-
-  setup () {
-    const $q = useQuasar()
-
-    function onFeedback (tipo, msg) {
-      $q.notify({
-      type: tipo,
-      position: 'top',
-      progress: true,
-      message: msg  
-      })
-    }
-
-    return { onFeedback }
-  },
   methods: {
   enviarFormulario(e) {
     // Impede Evento padrão de usar @submit
-    e.preventDefault();
+    
 
     let login = {  "Usuario": this.var_email, "Senha": this.var_senha}
     getLoginGeral(login)
