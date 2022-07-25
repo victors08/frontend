@@ -7,7 +7,7 @@
 
       <q-form
         class="Flex row justify-between"
-        @submit="enviarFormulario($event)"
+        @submit="enviarFormulario()"
       >
         
           <InputTexto
@@ -138,7 +138,6 @@
               label="Confirmar"
               color="positive"
               type="submit"
-              @click="SingUp()"
             />
 
             <q-btn 
@@ -205,19 +204,16 @@ export default {
         }
       }) 
     },
-    enviarFormulario(e, clearCep , clearCpf) {
-      // Impede Evento padrão de usar @submit
-      e.preventDefault();
-      
+    enviarFormulario(clearCep , clearCpf) {
       if(clearCep == "" && clearCpf == "") 
-      clearCep = this.var_cep.replace(/\.|\-/g, '');
+      clearCep = this.var_cep.replace(/\-/g, '');
       clearCpf = this.var_cpf.replace(/\.|\-/g, '');
 
       let var_login = {
         "nome": this.var_nome,
         "email": this.var_email,
         "pais": this.var_pais,
-        "cep": clearCep,
+        "cep": this.var_cep,
         "uf_endereco": this.var_estado,
         "cidade": this.var_municipio,
         "rua": this.var_rua,
@@ -230,12 +226,12 @@ export default {
       UsuarioPost(var_login)
       .then(response => {
         if(response.status == 200){
+          console.log("Erro ao criar usuário")
+        }else{
+          window.alert("Usuário criado com sucesso.")
           this.$router.push({name: 'home'});
         }
       })
-      .catch(err => {
-          this.onRejected(err.response.statusText);
-        })
     }
   }
 }

@@ -9,20 +9,18 @@
           <InputTexto
             v-model="var_nome"
             class="col-12 q-pa-xs"
-            lazy-rules="ondemand"
-            :rules="[ val => !!val || 'Por favor, informe um nome']"
             string_etiqueta="Nome"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
           />
   
           <InputTexto
             v-model="var_email"
             class="col-7 q-ma-xs"
-            lazy-rules="ondemand"
-            :rules="[ val => !!val || 'Por favor, informe o email']"
             string_etiqueta="E-mail"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
             type="email"
           />
@@ -32,6 +30,7 @@
             class="col-4 q-ma-xs"
             string_etiqueta="País"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
           />
   
@@ -40,6 +39,7 @@
             class="col-3 q-ma-xs"
             string_etiqueta="CEP"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
           />
 
@@ -48,6 +48,7 @@
             class="col-3 q-ma-xs"
             string_etiqueta="Estado"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
           />
   
@@ -56,6 +57,7 @@
             class="col-5 q-ma-xs"
             string_etiqueta="Municipio"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
           />
 
@@ -64,6 +66,7 @@
             class="col-3 q-ma-xs"
             string_etiqueta="Bairro"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
           />
 
@@ -72,6 +75,7 @@
             class="col-4 q-ma-xs"
             string_etiqueta="Rua"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
           />
 
@@ -80,6 +84,7 @@
             class="col-3 q-ma-xs"
             string_etiqueta="Número"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
           />
 
@@ -88,6 +93,7 @@
             class="col-6 q-ma-xs"
             string_etiqueta="Complemento"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
           />
 
@@ -100,6 +106,7 @@
             class="col-5 q-ma-xs"
             string_etiqueta="CPF"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
           />
 
@@ -108,18 +115,17 @@
             class="col-5 q-ma-xs"
             string_etiqueta="PIS"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
           />
 
           <InputTexto
             v-model="var_senha"
             class="col-6 q-ma-xs"
-            lazy-rules="ondemand"
-            :rules="[ val => !!val || 'Por favor, informe uma senha']"
             string_etiqueta="Senha"
             bg-color="grey-1"
+            readonly
             :prm_limpavel="false"
-            type="password"
           />
 
           <q-card-actions class="fit row justify-evenly">
@@ -147,10 +153,30 @@
 <script>
 import InputTexto from '@/components/campos/inputTexto.vue'
 
+//Import Vue
+import { ref } from 'vue'
+
 export default {
   name:'Profile',
   components: {
     InputTexto,
+  },
+  data (){
+    return{
+      var_nome: ref(''),
+      var_email: ref(''),
+      var_pais: ref(''),
+      var_cep: ref(''),
+      var_estado: ref(''),
+      var_municipio: ref(''),
+      var_bairro: ref(''),
+      var_rua: ref(''),
+      var_numero: ref(''),
+      var_complemento: ref(''),
+      var_cpf: ref(''),
+      var_pis: ref(''),
+      var_senha: ref(''),
+    }
   },
   methods: {
     Logout(){

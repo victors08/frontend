@@ -11,7 +11,7 @@
       <div class="row">
         <q-form 
           class="fit row justify-center"
-          @submit="enviarFormulario()"
+          @submit="SingUp()"
         >
           <InputTexto v-model="var_email"
           class="q-my-md"
@@ -60,8 +60,8 @@
 
 <script>
 
-import { useQuasar, SessionStorage} from 'quasar'
 import { ref } from 'vue'
+
 import InputTexto from '@/components/campos/inputTexto.vue'
 
 
@@ -78,10 +78,7 @@ export default {
     }
   },
   methods: {
-  enviarFormulario(e) {
-    // Impede Evento padrão de usar @submit
-    
-
+  /*enviarFormulario() {
     let login = {  "Usuario": this.var_email, "Senha": this.var_senha}
     getLoginGeral(login)
     .then(response => {
@@ -106,6 +103,9 @@ export default {
         this.console(err.data)
         this.feedback('negative','Não foi possivel realizar o login')
       })
+    },*/
+    SingUp(){
+      this.$router.push({name: 'profile'})
     }
   },
 }

@@ -36,7 +36,7 @@ function UsuarioPut(reg, id) {
 
 function UsuarioDelete(id) {
     return axios ({
-      method: 'delete',
+      method: 'get',
       url: `${URLBase}usuarios/delete/${id}`,
     })
 }
